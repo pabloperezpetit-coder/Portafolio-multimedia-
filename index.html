@@ -402,6 +402,7 @@ body{overflow-x:hidden}section{scroll-margin-top:90px;padding:100px 0}.wrap{widt
 const $ = id => document.getElementById(id);
 
 const projects = [
+  {id:'einstein', name:'Einstein — Documental', video:'videos/Documental Einstein final.mp4', tag:'Documental', tc:'', g:'g6', role:'Diseñador Multimedia', year:'—', type:'Documental audiovisual', desc:'Documental audiovisual sobre Albert Einstein. Proyecto de edición y narrativa documental.', tags:['Documental','Edición audiovisual','Diseño multimedia']},
   {id:'vans', name:'Vans — Comercial', poster:'imagenes/vans-comercial.svg', video:'videos/Vans terminado.mp4', tag:'Comercial', tc:'', g:'g3', role:'Diseñador Multimedia', year:'—', type:'Comercial audiovisual', desc:'Pieza audiovisual de estilo comercial para Vans. Exploración de ritmo, montaje e identidad visual aplicada a contenido de producto.', tags:['Video','Edición audiovisual','Diseño multimedia']},
   {id:'reel', name:'Amazon — Motion', poster:'imagenes/amazon-video.jpg', video:'videos/amazon-video.mp4', tag:'Motion', tc:'00:00:12:04', g:'g5', role:'Motion Designer', year:'2025', type:'Motion graphics',
    desc:'Pieza de motion graphics realizada en After Effects.', tags:['Motion','After Effects']},
@@ -412,7 +413,7 @@ const projects = [
 
 $('grid').innerHTML = projects.map(p => `
   <button class="card ${p.video ? 'video-card' : 'design-card'}" data-id="${p.id}" aria-label="${p.video ? 'Reproducir' : 'Ver'} ${p.name}">
-    <div class="thumb ${p.g}">${p.id === 'vans' ? `<video class="project-poster vans-thumbnail" src="${p.video}#t=1" poster="${p.poster}" preload="auto" muted playsinline aria-hidden="true" tabindex="-1"></video>` : p.poster ? `<img class="project-poster" src="${p.poster}" alt="${p.name}" loading="lazy">` : ''}<span class="tc">${p.video ? 'MOTION / VIDEO' : 'DISEÑO DIGITAL'}</span>${p.video ? '<div class="play"></div>' : '<span class="case-arrow" aria-hidden="true">↗</span>'}<span class="tag">${p.tag}</span></div>
+    <div class="thumb ${p.g}">${p.id === 'einstein' ? `<video class="project-poster" src="${p.video}#t=1" preload="metadata" muted playsinline aria-hidden="true" tabindex="-1"></video>` : p.id === 'vans' ? `<video class="project-poster vans-thumbnail" src="${p.video}#t=1" poster="${p.poster}" preload="auto" muted playsinline aria-hidden="true" tabindex="-1"></video>` : p.poster ? `<img class="project-poster" src="${p.poster}" alt="${p.name}" loading="lazy">` : ''}<span class="tc">${p.video ? 'MOTION / VIDEO' : 'DISEÑO DIGITAL'}</span>${p.video ? '<div class="play"></div>' : '<span class="case-arrow" aria-hidden="true">↗</span>'}<span class="tag">${p.tag}</span></div>
     <div class="card-body"><span class="card-kicker">${p.type}</span><h3>${p.name}<span class="card-arrow" aria-hidden="true">↗</span></h3><p>${p.desc}</p><span class="card-action">${p.video ? 'Ver proyecto ↗' : 'Explorar caso ↗'}</span></div>
   </button>`).join('');
 
@@ -479,7 +480,7 @@ function openModal(p){
   $('mMeta').innerHTML = `<span>Rol<b>${p.role}</b></span>${p.year && p.year !== '—' ? `<span>Año<b>${p.year}</b></span>` : ''}<span>Tipo<b>${p.type}</b></span>`;
   $('mTitle').textContent = p.name;
   $('mDesc').textContent = p.desc;
-  $('mFocus').textContent = ({vans:'Ritmo de montaje e identidad visual de producto.',reel:'Animación de marca y composición.',audiovisual:'Narrativa y atmósfera documental.',sonora:'Presentación audiovisual de producto.',briefly:'Composición y ritmo comercial.'})[p.id] || 'Exploración audiovisual.';
+  $('mFocus').textContent = ({vans:'Ritmo de montaje e identidad visual de producto.',reel:'Animación de marca y composición.',audiovisual:'Narrativa y atmósfera documental.',einstein:'Narrativa documental y edición audiovisual.',sonora:'Presentación audiovisual de producto.',briefly:'Composición y ritmo comercial.'})[p.id] || 'Exploración audiovisual.';
   $('mTools').textContent = p.tags.join(' · ');
   $('mTags').innerHTML = p.tags.map(t => `<span class="chip">${t}</span>`).join('');
   backdrop.inert = false;
@@ -533,7 +534,7 @@ $('close').addEventListener('click', closeModal);
 backdrop.addEventListener('click', e => { if(e.target === backdrop) closeModal(); });
 document.addEventListener('keydown', e => { if(e.key === 'Escape' && backdrop.classList.contains('open')) closeModal(); });
 
-const projectCategories={vans:['commercial','editing'],reel:['motion'],audiovisual:['editing'],sonora:['motion','commercial'],briefly:['commercial','motion']};
+const projectCategories={vans:['commercial','editing'],reel:['motion'],audiovisual:['editing'],einstein:['editing'],sonora:['motion','commercial'],briefly:['commercial','motion']};
 document.querySelectorAll('[data-filter]').forEach(button=>button.addEventListener('click',()=>{
  const filter=button.dataset.filter;
  document.querySelectorAll('[data-filter]').forEach(item=>{item.classList.toggle('active',item===button);item.setAttribute('aria-pressed',String(item===button))});
