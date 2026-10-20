@@ -413,7 +413,7 @@ const projects = [
 
 $('grid').innerHTML = projects.map(p => `
   <button class="card ${p.video ? 'video-card' : 'design-card'}" data-id="${p.id}" aria-label="${p.video ? 'Reproducir' : 'Ver'} ${p.name}">
-    <div class="thumb ${p.g}">${p.poster ? `<img class="project-poster" src="${p.poster}" alt="${p.name}" loading="lazy">` : p.id === 'vans' ? `<video class="project-poster" src="${p.video}#t=0.5" preload="metadata" muted playsinline aria-hidden="true" tabindex="-1"></video>` : ''}<span class="tc">${p.video ? 'MOTION / VIDEO' : 'DISEÑO DIGITAL'}</span>${p.video ? '<div class="play"></div>' : '<span class="case-arrow" aria-hidden="true">↗</span>'}<span class="tag">${p.tag}</span></div>
+    <div class="thumb ${p.g}">${p.id === 'vans' ? `<video class="project-poster vans-thumbnail" src="${p.video}#t=1" poster="${p.poster}" preload="auto" muted playsinline aria-hidden="true" tabindex="-1"></video>` : p.poster ? `<img class="project-poster" src="${p.poster}" alt="${p.name}" loading="lazy">` : ''}<span class="tc">${p.video ? 'MOTION / VIDEO' : 'DISEÑO DIGITAL'}</span>${p.video ? '<div class="play"></div>' : '<span class="case-arrow" aria-hidden="true">↗</span>'}<span class="tag">${p.tag}</span></div>
     <div class="card-body"><span class="card-kicker">${p.type}</span><h3>${p.name}<span class="card-arrow" aria-hidden="true">↗</span></h3><p>${p.desc}</p><span class="card-action">${p.video ? 'Ver proyecto ↗' : 'Explorar caso ↗'}</span></div>
   </button>`).join('');
 
@@ -426,7 +426,7 @@ if ('IntersectionObserver' in window && !window.matchMedia('(prefers-reduced-mot
 // Extraer un fotograma auténtico del archivo Vans para usarlo como miniatura,
 // tanto en el destacado inicial como en la tarjeta de proyectos.
 (function loadVansThumbnail(){
-  const targets = document.querySelectorAll('.vans-frame, .card[data-id="vans"] .project-poster');
+  const targets = document.querySelectorAll('.vans-frame');
   if (!targets.length) return;
   const source = document.createElement('video');
   source.preload = 'auto';
@@ -459,6 +459,14 @@ if ('IntersectionObserver' in window && !window.matchMedia('(prefers-reduced-mot
   }, {once:true});
 })();
 
+// El fotograma del video de Vans queda visible y en pausa en su tarjeta.
+const vansCardVideo = document.querySelector('.card[data-id="vans"] .vans-thumbnail');
+if (vansCardVideo) {
+  vansCardVideo.addEventListener('loadedmetadata', () => {
+    if (Number.isFinite(vansCardVideo.duration) && vansCardVideo.duration > 0) vansCardVideo.currentTime = Math.min(1, vansCardVideo.duration / 2);
+  }, {once:true});
+  vansCardVideo.addEventListener('seeked', () => vansCardVideo.pause());
+}
 // Modal
 const backdrop = $('backdrop');
 let lastFocus;
