@@ -283,7 +283,7 @@ body{overflow-x:hidden}section{scroll-margin-top:90px;padding:100px 0}.wrap{widt
       <div class="showcase" aria-label="Selección de trabajos">
         <div class="showcase-top"><span><i></i> EN MOVIMIENTO</span><span>SELECCIÓN / 2026</span></div>
         <button class="showcase-main" data-project="vans" aria-label="Reproducir Vans Comercial">
-          <video class="showcase-preview" src="videos/Vans terminado.mp4#t=1" poster="imagenes/vans-comercial.svg" autoplay muted loop playsinline preload="metadata" aria-hidden="true" tabindex="-1"></video>
+          <img class="vans-frame" src="imagenes/vans-comercial.svg" alt="Fotograma del comercial Vans" fetchpriority="high" width="1280" height="720">
           <span class="showcase-overlay"><span><small>COMERCIAL</small><b>Vans — Comercial</b></span><span class="showcase-play" aria-hidden="true">▶</span></span>
         </button>
         <div class="showcase-bottom">
@@ -422,6 +422,43 @@ if ('IntersectionObserver' in window && !window.matchMedia('(prefers-reduced-mot
  const observer = new IntersectionObserver((entries, obs) => entries.forEach(entry => { if(entry.isIntersecting){entry.target.classList.add('is-visible');obs.unobserve(entry.target)} }), {threshold:.08});
  document.querySelectorAll('#grid .card').forEach((card,i)=>{card.classList.add('reveal-ready');card.style.transitionDelay=(i%2)*85+'ms';observer.observe(card)});
 }
+
+// Extraer un fotograma auténtico del archivo Vans para usarlo como miniatura,
+// tanto en el destacado inicial como en la tarjeta de proyectos.
+(function loadVansThumbnail(){
+  const targets = document.querySelectorAll('.vans-frame, .card[data-id="vans"] .project-poster');
+  if (!targets.length) return;
+  const source = document.createElement('video');
+  source.preload = 'auto';
+  source.muted = true;
+  source.playsInline = true;
+  source.src = 'videos/Vans terminado.mp4';
+  source.addEventListener('loadedmetadata', () => {
+    source.currentTime = Math.min(1.5, Math.max(.1, source.duration / 3));
+  }, {once:true});
+  source.addEventListener('seeked', () => {
+    try {
+      const canvas = document.createElement('canvas');
+      canvas.width = Math.min(960, source.videoWidth);
+      canvas.height = Math.round(canvas.width * source.videoHeight / source.videoWidth);
+      canvas.getContext('2d').drawImage(source, 0, 0, canvas.width, canvas.height);
+      const image = canvas.toDataURL('image/jpeg', .86);
+      targets.forEach(el => {
+        if(el.tagName === 'IMG') el.src = image;
+        else {
+          const img = document.createElement('img');
+          img.className = 'project-poster';
+          img.alt = 'Fotograma del comercial Vans';
+          img.src = image;
+          el.replaceWith(img);
+        }
+      });
+    } catch(err) { console.warn('Miniatura Vans no disponible:', err); }
+    source.removeAttribute('src');
+    source.load();
+  }, {once:true});
+})();
+
 // Modal
 const backdrop = $('backdrop');
 let lastFocus;
