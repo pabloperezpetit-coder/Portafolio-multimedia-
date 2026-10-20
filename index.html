@@ -404,15 +404,13 @@ const projects = [
   {"id": "audiovisual", "name": "Pablo Escobar Documental", "poster": "imagenes/pablo-escobar-documental.jpg", "video": "videos/pablo-escobar-documental.mp4", "tag": "Documental", "tc": "00:00:20:13", "g": "g6", "role": "Diseñador Multimedia", "year": "—", "type": "Documental", "desc": "Pablo Escobar Documental. Realizado en After Effects.", "tags": ["Documental", "After Effects"]},
   {"id": "sonora", "name": "AirPods", "poster": "imagenes/airpods.jpg", "video": "videos/airpods.mp4", "tag": "Video", "tc": "00:00:06:20", "g": "g2", "role": "Diseñador Multimedia", "year": "—", "type": "Video", "desc": "AirPods. Realizado en After Effects.", "tags": ["Video", "After Effects"]},
   {"id": "briefly", "name": "Nike Comercial", "poster": "imagenes/nike-comercial.jpg", "video": "videos/nike-comercial.mp4", "tag": "Comercial", "tc": "00:00:05:08", "g": "g1", "role": "Diseñador Multimedia", "year": "—", "type": "Comercial", "desc": "Nike Comercial. Realizado en After Effects.", "tags": ["Comercial", "After Effects"]},
-  {id:'nomada', name:'Nómada', tag:'UI/UX', tc:'00:02:35:00', g:'g3', role:'UI/UX Designer', year:'2024', type:'App de viajes',
-   desc:'Flujo de reserva y descubrimiento de rutas para una app de viajes, de wireframe a prototipo navegable.', tags:['UI/UX','Prototipo','Mobile']},
   {id:'parking', name:'Parking UX', tag:'UX Case', tc:'00:03:12:18', g:'g4', role:'UX Researcher', year:'2024', type:'Case study',
    desc:'Investigación y rediseño del flujo de pago en un estacionamiento, con foco en reducir fricción y errores.', tags:['UX Research','Case Study']}
 ];
 
 $('grid').innerHTML = projects.map(p => `
   <button class="card ${p.video ? 'video-card' : 'design-card'}" data-id="${p.id}" aria-label="${p.video ? 'Reproducir' : 'Ver'} ${p.name}">
-    <div class="thumb ${p.g}">${p.poster ? `<img class="project-poster" src="${p.poster}" alt="${p.name}" loading="lazy">` : ''}<span class="tc">${p.video ? 'MOTION / VIDEO' : 'DISEÑO DIGITAL'}</span>${p.video ? '<div class="play"></div>' : '<span class="case-arrow" aria-hidden="true">↗</span>'}<span class="tag">${p.tag}</span></div>
+    <div class="thumb ${p.g}">${p.poster ? `<img class="project-poster" src="${p.poster}" alt="${p.name}" loading="lazy">` : p.id === 'vans' ? `<video class="project-poster" src="${p.video}#t=0.5" preload="metadata" muted playsinline aria-hidden="true" tabindex="-1"></video>` : ''}<span class="tc">${p.video ? 'MOTION / VIDEO' : 'DISEÑO DIGITAL'}</span>${p.video ? '<div class="play"></div>' : '<span class="case-arrow" aria-hidden="true">↗</span>'}<span class="tag">${p.tag}</span></div>
     <div class="card-body"><h3>${p.name}<span class="card-arrow" aria-hidden="true">↗</span></h3><p>${p.video ? 'After Effects' : p.type}</p></div>
   </button>`).join('');
 
